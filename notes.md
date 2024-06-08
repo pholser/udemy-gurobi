@@ -271,7 +271,7 @@ Advanced Gurobi constraint types:
   a * x <= b is enforced only if y == v
 
 
-* e.g. Chemical production
+e.g. Chemical production
 Purchasing raw materials:
 * Sulfur
 * Ammonia
@@ -282,5 +282,145 @@ Purchasing raw materials:
 -- Cost per unit of ____?   c, d, e
 -- Total cost of sulfur used?  c * x + d * y + e * z
 
+Start running out of symbols with more chemicals...
 
+Use subscripts:
+x_s8 (S_8 = sulfur)
+x_nh3 (NH_3 = ammonia)
+x_n2 (N_2 = nitrogen)
+
+then: c_s8, c_nh3, c_n2
+
+total cost of chemicals used:
+c["s8"] * x["s8"]
++ c["nh3"] * x["nh3"]
++ c["n2"] * x["n2"]
+==
+sum[j] { c_j * x_j }
+==
+quicksum(c[j] * x[j] for j in ["s8", "nh3", "n2"])
+==
+quicksum(c[j] * x[j] for j in range(3))
+   # adopting numeric indices for the different chemicals
+==
+quicksum(c[j] * x[j] for j in chemicals)
+   # named set
+
+Multiple subscripts:
+
+e.g. Bicycle sharing
+N: number of locations at which you can pick up a bicycle to rent
+
+with open("data.json") as f:
+    data = json.load(f)
+locations = data["locations"]
+pairs = data["pairs"]   # pairs of locations
+
+e_i: count of bicycles at location i in the evening
+m_i = count of bicycles needed at location i the next morning
+E = data["E"]
+M = data["M"]
+
+If e_i = m_i at every location i, great! A perfect setup,
+but very unlikely.
+
+Otherwise: what's the minimum cost to rearrange the bicycles to
+get the right number m_i at each location i?
+
+Define x_ij to be the number of bicycles moved overnight from
+location i to location j.
+
+model = gurobipy.Model()
+x = model.addVars(pairs)
+    # e.g. x["Home", "Tech"] = count of bicycles moved overnight from home
+    # to campus
+# When modeling mathematically x_ij, no need for comma.
+# Nice to use comma when referencing x_{specific-val},{other-val}
+# and vice versa
+
+For every location i, we must move the correct number of bicycles
+there.
+
+How many bicycles are moved from to Tech?
+from Home:
+   x["Home", "Tech"]
+from Truist:
+   x["Truist", "Tech"]
+from ...
+Bicycles already at Tech:
+   x["Tech", "Tech"]
+
+--> x.sum("*", "Tech")
+
+model.addConstr(x.sum("*", "Tech") == M["GT"])
+model.addConstr(x.sum("*", "Truist") == M["Truist"])
+model.addConstr(x.sum("*", "Aquarium") == M["Aquarium"])
+...
+-->
+model.addConstrs(
+    x.sum("*", j) == M[j] for j in locations,
+    name="correct-number-bicycles"
+)
+
+Uses:
+* from-and-to situations (amount of something going from i to j)
+* blending/mixing  (amount of ingredient used to make x)
+* two distinguishing characteristics (# of books in genre i of length j)
+* combinations of these
+
+Sets:
+Helpful for sums over non-consecutive variables
+
+e.g. Purchasing ad space
+* in 1000 locations, for $1M
+* physical billboards
+* TV commercials
+* Internet ads
+
+Let x_j = money spent on location j
+Then m.addConstr(quicksum(x[j] for j in range(1000)) <= 1e6)
+
+Order the locations? Physical billboards 1-400, TV ads 401-650,
+internet ads 651-1000...
+m.addConstr(quicksum(x[j] for j in range(400)) <= 4e5)
+m.addConstr(quicksum(x[j] for j in range(400, 650)) <= 4e5)
+m.addConstr(quicksum(x[j] for j in range(650, 1000)) <= 4e5)
+
+Additional constraints:
+* No more than 40% on a type of ad (physical, TV, internet)
+* No more than 30% on sports
+* No more than 20% on news
+
+How to add up news, tho? news outlets might be non-consecutive.
+
+Create sets:
+P = set of physical locations
+T = set of TV locations
+I = set of Internet locations
+Partition each of 1-1000 into these sets
+m.addConstr(quicksum(x[j] for j in P) <= 4e5)
+m.addConstr(quicksum(x[j] for j in T) <= 4e5)
+m.addConstr(quicksum(x[j] for j in I) <= 4e5)
+
+S = set of sports locations
+N = set of news locations
+m.addConstr(quicksum(x[j] for j in S) <= 3e5)
+m.addConstr(quicksum(x[j] for j in N) <= 2.5e5)
+
+Or...indicator data.
+Let P_j = 1 if location j is physical, else 0
+Let T_j = 1 if location j is TV, else 0
+Let I_j = 1 if location j is Internet, else 0
+Let S_j = 1 if location j is sports, else 0
+Let N_j = 1 if location j is news, else 0
+Then...
+m.addConstr(quicksum(P[j] * x[j] for j in range(1000)) <= 4e5)
+m.addConstr(quicksum(T[j] * x[j] for j in range(1000)) <= 4e5)
+m.addConstr(quicksum(I[j] * x[j] for j in range(1000)) <= 4e5)
+m.addConstr(quicksum(S[j] * x[j] for j in range(1000)) <= 3e5)
+m.addConstr(quicksum(N[j] * x[j] for j in range(1000)) <= 2.5e5)
+Alternately...
+m.addConstr(quicksum(x[j] for j in range(1000) if P[j] == 1) <= 4e5)
+Or...
+m.addConstr(x.prod(P) <= 4e5)
 
