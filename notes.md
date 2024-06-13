@@ -424,3 +424,61 @@ m.addConstr(quicksum(x[j] for j in range(1000) if P[j] == 1) <= 4e5)
 Or...
 m.addConstr(x.prod(P) <= 4e5)
 
+Building a model:
+-----
+e.g. real estate investment example
+A real estate investment company has an investment budget that they
+want to spend in a number of cities, in a way that maximizes the
+predicted increase in value.
+To diversify, they want to limit their spending in each region,
+and have also set min and max spending limits in each city.
+
+Hint: Look for nouns about the situation; look for verbs about the actions
+that can be taken
+
+* param budget: B
+* param cities: N = number of cities
+* var amount spent/invested in each city j: x_j
+* param predicted value increase in each city j: P_j
+* param regions: S = number of regions
+* param set of cities in region s: R_s
+* param investment limit in region s: L_s
+* param maximum spend for any city: M
+* param min spend for each city j: m_j
+* constraint budget: sum[j in 1..N] { x_j } <= B
+* objective: max predicted value increase:
+    max sum[j in 1..n] { P_j * x_j }
+    
+-->
+
+from gurobipy import GRB
+import gurobipy as gp
+import json
+
+m = gp.Model("investment")
+with open("investment.json", "r") as f:
+    data = json.load(f)
+
+B = data["B"]
+N = data["N"]
+P = data["profits"]
+L = data["L"]
+R = data["R"]
+Mmax = data["M"]
+Mmin = data["m"]
+x = m.addVars(N, lb=Mmin, ub=Mmax, name="x")
+m.addConstr(gp.quicksum(x[j] for j in range(N)) <= B, name="budget")
+m.setObjective(gp.quicksum(P[j] * x[j] for j in range(N)), GRB.MAXIMIZE)
+m.addConstrs(
+  (gp.quicksum(x[j] for j in S[r]) <= L[r] \
+    for r in range(len(R))),
+  name="region"
+)
+
+
+
+inbound/bigd/Loss-Run National - 01-08-2024 Vickie J Martinez.xlsx
+
+inbound/vestis/sedgwick/e021136d.022924
+
+

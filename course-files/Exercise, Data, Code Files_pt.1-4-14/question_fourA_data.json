@@ -1,0 +1,38 @@
+{
+	"Materials": [ "Paper", "Glass", "Plastic" ],
+
+	"Companies": [ "A", "B", "C", "D" ],
+
+	"Bundles": {
+		"A": { "Paper": 5, "Glass": 3, "Plastic": 1 },
+		"B": { "Paper": 7, "Glass": 3, "Plastic": 2 },
+		"C": { "Paper": 2, "Glass": 1, "Plastic": 1 },
+		"D": { "Paper": 3, "Glass": 1, "Plastic": 4 }
+	},
+
+	"Minimums": {
+		"A": 100,
+		"B": 100,
+		"C": 100,
+		"D": 100
+	},
+
+	"BundlePrices": {
+		"A": 2,
+		"B": 3,
+		"C": 1,
+		"D": 2
+	},
+
+	"SmallPrices": {
+		"Paper": 0.05,
+		"Glass": 0.03,
+		"Plastic": 0.02
+	},
+
+	"Collected": {
+		"Paper": 15000,
+		"Glass": 7000,
+		"Plastic": 14000
+	}
+}

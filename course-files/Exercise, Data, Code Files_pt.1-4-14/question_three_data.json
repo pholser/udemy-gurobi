@@ -1,0 +1,61 @@
+{
+	"Furniture": [ "beds", "bookcases", "chairs (dining room)", "chairs (living room)", 
+		"chairs (office)", "coffee tables", "couches", "desks", "dining tables",
+		"dressers" ],
+
+	"Fmins": {
+			"beds": 0.1,
+			"bookcases": 0.05,
+			"chairs (dining room)": 0.05,
+			"chairs (living room)": 0.05,
+			"chairs (office)": 0.05,
+			"coffee tables": 0.05,
+			"couches": 0.05,
+			"desks": 0.05,
+			"dining tables": 0.05,
+			"dressers": 0.05
+	},
+	
+	"MarginalProfit": {
+			"beds": 10,
+			"bookcases": 7,
+			"chairs (dining room)": 12,
+			"chairs (living room)": 9,
+			"chairs (office)": 3,
+			"coffee tables": 5,
+			"couches": 8,
+			"desks": 6,
+			"dining tables": 13,
+			"dressers": 4
+	},
+
+	"Categories": [ "bedroom", "office", "storage-work", "dining room", "seating",
+		"living room", "seating", "tables" ],
+
+	"Cmins": {
+			"bedroom": 0.2, 
+			"office": 0.1, 
+			"storage-work": 0.05, 
+			"dining room": 0.15, 
+			"seating": 0.5, 
+			"living room": 0.2, 
+			"tables": 0.1
+	},
+
+	"Classifications": {
+			"beds": ["bedroom"],
+			"bookcases": ["office", "storage-work"],
+			"chairs (dining room)": ["dining room", "seating"],
+			"chairs (living room)": ["living room", "seating"],
+			"chairs (office)": ["office", "seating"],
+			"coffee tables": ["living room", "tables"],
+			"couches": ["living room", "seating"],
+			"desks": ["office", "storage-work"],
+			"dining tables": ["dining room", "tables"],
+			"dressers": ["bedroom", "storage-work"]
+	},
+
+	"ExtraGeqConstraints": {
+			"Dining": [ 1, "dining tables", 1.5, "chairs (dining room)" ]
+	}
+}
