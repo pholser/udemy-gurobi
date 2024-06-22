@@ -1,0 +1,12 @@
+{
+	"P": [
+		{"name": "Process 1",
+			"cost_per_ton_of_alloy_created": 28,
+			"pollution_per_ton_of_alloy_created_in_pounds": 90},
+		{"name": "Process 2",
+			"cost_per_ton_of_alloy_created": 53,
+		    "pollution_per_ton_of_alloy_created_in_pounds": 50}
+	],
+	"production_quota_in_tons": 3400,
+    "pollution_ceiling_in_pounds": 200000
+}
