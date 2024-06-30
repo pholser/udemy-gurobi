@@ -1,0 +1,53 @@
+{
+  "categories": [
+    "Bedroom",
+    "Office",
+    "Storage/Work",
+    "Dining Room",
+    "Seating",
+    "Living Room",
+    "Tables"
+  ],
+  "furniture_types": [
+    {"name": "Beds",
+     "categories": [1, 0, 0, 0, 0, 0, 0],
+     "marginal_annual_profit_per_extra_percent_of_floor_space": 10
+    },
+    {"name": "Bookcases",
+     "categories": [0, 1, 1, 0, 0, 0, 0],
+     "marginal_annual_profit_per_extra_percent_of_floor_space": 7
+    },
+    {"name": "Chairs, dining room",
+     "categories": [0, 0, 0, 1, 1, 0, 0],
+     "marginal_annual_profit_per_extra_percent_of_floor_space": 12
+    },
+    {"name": "Chairs, living room",
+     "categories": [0, 0, 0, 0, 1, 1, 0],
+     "marginal_annual_profit_per_extra_percent_of_floor_space": 9
+    },
+    {"name": "Chairs, office",
+     "categories": [0, 1, 0, 0, 1, 0, 0],
+     "marginal_annual_profit_per_extra_percent_of_floor_space": 3
+    },
+    {"name": "Coffee tables",
+     "categories": [0, 0, 0, 0, 0, 1, 1],
+     "marginal_annual_profit_per_extra_percent_of_floor_space": 5
+    },
+    {"name": "Couches",
+     "categories": [0, 0, 0, 0, 1, 1, 0],
+     "marginal_annual_profit_per_extra_percent_of_floor_space": 8
+    },
+    {"name": "Desks",
+     "categories": [0, 1, 1, 0, 0, 0, 0],
+     "marginal_annual_profit_per_extra_percent_of_floor_space": 6
+    },
+    {"name": "Dining Tables",
+     "categories": [0, 0, 0, 1, 0, 0, 1],
+     "marginal_annual_profit_per_extra_percent_of_floor_space": 13
+    },
+    {"name": "Dressers",
+     "categories": [1, 0, 1, 0, 0, 0, 0],
+     "marginal_annual_profit_per_extra_percent_of_floor_space": 4
+    }
+  ]
+}
