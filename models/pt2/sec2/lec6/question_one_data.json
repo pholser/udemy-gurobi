@@ -1,0 +1,50 @@
+{
+	"Machines": ["Broaching", "Brazing", "Grinding"],
+
+	"Instruments": ["Trumpet", "Flugelhorn", "Baritone", "Contrabass"],
+
+	"Processing Times": {
+		"Broaching": {
+			"Trumpet": 10,
+			"Flugelhorn": 8,
+			"Baritone": 12,
+			"Contrabass": 15
+		},
+		"Brazing": {
+			"Trumpet": 20,
+			"Flugelhorn": 20,
+			"Baritone": 20,
+			"Contrabass": 20
+		},
+		"Grinding": {
+			"Trumpet": 10,
+			"Flugelhorn": 12,
+			"Baritone": 15,
+			"Contrabass": 20
+		}
+
+	},
+
+	"Max Sales": {
+		"Trumpet": 100,
+		"Flugelhorn": 40,
+		"Baritone": 40,
+		"Contrabass": 20
+	},
+	
+	"Available Times": {
+		"Broaching": 2000,
+		"Brazing": 3000,
+		"Grinding": 2000
+	},
+
+	"Profits": {
+		"Trumpet": 600,
+		"Flugelhorn": 700,
+		"Baritone": 1000,
+		"Contrabass": 1500
+	},
+
+	"NoFlugelhorns": ["Trumpet", "Baritone", "Contrabass"]
+
+}

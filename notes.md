@@ -475,3 +475,398 @@ m.addConstrs(
   name="region"
 )
 
+Optimization in data science:
+-----
+Linear regression model:
+* variables a_0, a_1, ..., a_m
+* no constraints
+* objective:
+  minimize sum[i in 1..n] {
+    (y_i - (a_0 + sum[j in 1..m] { a_j * x_ij }))^2
+  }
+
+Given n data points:
+* x_ij = j'th factor for data point i
+* y_i = response for data point i
+* find coefficients a_0, a_1, ..., a_m to best fit data
+
+a = model.addVars(m + 1, lb=-GRB.INFINITY)
+model.setObjective(
+  gp.quicksum(
+    (y[i] -
+      (a[0] +
+        gp.quicksum(
+	  a[j+1] * x[i][j] for j in range(m)
+	)
+      )
+    ) ** 2
+    for i in range(n)
+  )
+)
+
+Lasso regression constraint: added to above model to
+restrict sum of variables:
+* sum[j in 1..m] { abs(a_j) } <= T
+
+a_abs = model.addVars(range(1, m + 1))
+model.addConstrs(
+  (a_abs[j] == gp.abs_(a[j]) for j in range(1, m + 1))
+)
+model.addConstr(a_abs.sum() <= T)
+
+Ridge regression constraint:
+* sum[j in 1..m] { (a_j)^2 } <= T
+model.addConstr(
+  gp.quicksum(a[j] ** 2 for j in range(1, m + 1)) <= T)
+
+Elastic net constraint:
+* lambda * sum[j in 1..m] { abs(a_j) }
+  +
+  (1 - lambda) * sum[j in 1..m] { (a_j)^2 }
+  <= T
+model.addConstr(
+  lam * a_abs.sum()
+  +
+  (1 - lam) * gp.quicksum(a[j] ** 2 for j in range(1, m + 1))
+  <= T
+)
+
+Logistic regression:
+estimates the probability of an event occurring, such as
+voted or didn’t vote, based on a given data set of
+independent variables.
+Often used to build a binary classifier.
+* variables a_0, a_1, ..., a_m
+* no constraints
+* objective:
+  minimize
+  sum[i : y_i = 1] { p(x_i) }
+  +
+  sum[i : y_i = 0] { 1 - p(x_i) }
+
+where p(x_i) =
+  1 / (1 + exp(-(a_0 + sum[j in 1..m] { a_j * x_ij })))
+
+Given n data points:
+* x_ij = j'th factor for data point i
+* y_i = response for data point i
+* find coefficients a_0, a_1, ..., a_m to best fit data
+
+Classification: what category does this data point
+  belong in
+
+Support vector machines, for hard classification:
+* variables a_0, a_1, ..., a_m
+* constraints:
+  (a_0 + sum[j in 1..m] { a_j * x_ij }) * y_i >= 1
+    for each i
+* objective: minimize sum[j in 1..m] { (a_j}^2 }
+
+Support vector machines, for soft classification:
+* variables a_0, a_1, ..., a_m
+* no constraints
+* objective:
+  minimize sum[i in 1..n] {
+    max[
+      0,
+      1 - (a_0 + sum[j in 1..m] { a_j * x_ij }) * y_i
+    ]
+    +
+    lambda * sum[j in 1..m] { (a_j)^2 }
+  }
+
+Time series models:
+A time series model is a set of data points ordered in time,
+where time is the independent variable. These models are used
+to analyze and forecast the future.
+
+Exponential smoothing:
+* variables: alpha, beta, gamma
+* constraints:
+  * 0 <= alpha <= 1
+  * 0 <= beta <= 1
+  * 0 <= gamma <= 1
+  C_t = gamma * (x_t / S_t) + (1 - gamma) * C_{t - 1}
+  T_t = beta * (S_t - S_{t - 1}) + (1 - beta) * T_{t - 1}
+  S_t = alpha * x_t / C_{t - L} + (1 - alpha) * (S_{t - 1] + T{t - 1])
+* objective:
+  minimize sum[t in 1..n] { (x_t - x^_t)^2 }
+
+ARIMA:
+* variables: mu, phi_i, theta_i
+* no constraints
+* objective:
+  minimize sum[t in 1..n] { (x_t - x^_t)^2 }
+where
+  x^_t = mu
+       + sum[i in 1..p] { phi_i * D_(d)i }
+       - sum[i in 1..q] { theta_i * (x^_{t - i} - x_{t - i}) }
+
+GARCH:
+* variables: omega, beta_i, gamma_i
+* no constraints
+* objective:
+  minimize sum[t in 1..n] { (sigma_t^2 - sigma^_t^2)^2 }
+where
+  sigma^_t = omega
+       + sum[i in 1..q] { beta_i * (sigma_{t - i})^2 }
+       - sum[i in 1..p] { gamma_i * (x^_{t - i} - x_{t - i}) }
+
+K-means for clustering:
+* Given data:
+  * x_ij = value of j'th attribute of data point i
+* variables:
+  * x_jk = coordinate j of cluster center k
+  * y_ik = 1 if point i is in cluster k, else 0
+* constraints:
+  * sum[k] { y_ik } = 1 for all data points i
+    (each data point is assigned a cluster)
+* objective:
+  minimize sum[i] { sum[k] { y_ik * p'th-root(sum[j] { (x_ij - z_jk)^p } ) } }
+  (minimize total distance from data points to their cluster centers)
+
+Optimization within data science algos:
+* Tree-based methods (including random forests):
+  * splits determined by maximizing information gain
+* Gradient boosting:
+  * Gradient is the direction of maximum improvement
+  * Weight on each new model can be determined to minimize error
+* Reinforcement learning:
+  * Optimize cumulative reward function
+* Neural networks/deep learning:
+  * Learn by optimizing cost function for parameter updates
+
+Customizing data science models using optimization:
+e.g. Linear regression model
+* Tweak exponent from 2 to lesser so that large residuals have less effect
+* Use optimization software to find best-fit regression line after that
+  # with exponent = 1...
+  a = model.addVars(n + 1, lb=-GRB.INFINITY)
+  residual = model.addVars(m, lb=-GRB.INFINITY)
+  residual_abs = model.addVars(m)
+  model.addConstrs(
+    (residual[i]
+      ==
+      y[i] - (a[0] + gp.quicksum(a[j + 1] * x[i][j] for j in range(n)))
+      for i in range(m))
+  )
+  model.addConstrs(
+    (residual_abs[i] == gp.abs_(residual[i]) for i in range(m))
+  )
+  model.setObjective(residual_abs.sum())
+* Add constraints: lasso regression, ridge, elastic net
+* Other constraints related to the question you want to answer
+  * fix the a_0 (intercept)
+  * ensure regression coefficients are decreasing
+    a_1 >= a_2, a_2 >= a_3, ...
+  * ensure differences between coefficients are decreasing
+* e.g. feature selection
+  * lasso regression model
+  * Higher tau_lasso for more features, lower tau_lasso for fewer features
+  * No way to set tau_lasso directly for a specific number of features
+  * Include new optimization variables w_i = 1 if feature i is selected,
+      else 0
+  * min[a_0, a_1, ..., a_n] {
+      sum[i in 1..m] (y_i - (a_0 + sum[j in 1..n] { a_j * x_ij }))^2
+    }
+  * select exactly F features:
+     sum[j in 1..n] { w_i } = F
+  * Feature can't have positive coefficient unless it is selected:
+     a_i <= U_i * w_i for each feature i  (big-M)
+  * Feature can't have negative coefficient unless it is selected:
+     a_i >= L_i * w_i for each feature i  (big-M)
+
+Modeling example:
+* Each day, an airline has planes flying on the following routes:
+  * LAX to IAH (1500 miles)
+  * IAH to LGA (1700 miles)
+  * LGA to MIA (1300 miles)
+  * MIA to LAX (2700 miles)
+* Airline needs to purchase jet fuel
+* Can be purchased at any of the four airports
+  * LAX: $0.88/gal
+  * HOU: $0.15/gal
+  * LGA: $1.05/gal
+  * MIA: $0.95/gal
+* Fuel is heavy: flying a plane with more fuel *requires* more fuel
+  to carry it
+* Planes have a fuel tank capacity of 14000 gal
+* For safety margin, planes need to land with at least 600 gal in tank
+* May purchase no more than 12000 gal of fuel at each stop
+
+Model:
+* Data:
+  * Fuel cost in city i : c_i
+  * Tank capacity, safety margin, purchase limit: T, S, M
+  * Distance from i to next city: d_i
+* Variables:
+  * Fuel purchased at city i: x_i
+  * Fuel at takeoff at city i: y_i
+  * Fuel at landing at city i: z_i
+* Objective: keep fuel cost low
+  * minimize sum[i] { c_i * x_i }
+* Constraints:
+  * tank capacity: y_i <= T for all cities i
+  * landing safety margin: z_i >= S for all cities i
+  * purchase limit: x_i <= M for all cities i
+  * non-negativity
+  * fuel take off with from city i
+    = fuel landed with at city i
+      + fuel purchase at city i
+    z_i + x_i = y_i  for all cities i
+    // balance constraint
+  * fuel landed with at cities i =
+      fuel taken off with from predecessor of city i
+      - fuel used in flight from predecessor of city i to city i
+  * fuel used in flight: (1 + (avg fuel level in flight)/2000) * d_{pred(i)}
+  * avg fuel level in flight = (y_{pred(i)} + z_i) / 2
+
+import gurobipy as gp
+from gurobipy import GRB
+import pandas as pd
+
+df = pd.read_excel("jet-fuel.xlsx", sheet_name="jet-fuel")
+cities = df["cities"]
+city, fuel_cost, pred = gp.multidict(
+  {c: [f, p]
+    for c, f, p in zip(
+      df["city"],
+      df["fuel_cost"],
+      df["predecessor"]
+    )
+  }
+)
+legs, distance = gp.multidict(
+  {(f, t): d
+    for f, t, d in zip(
+      df["legs:from"],
+      df["legs:to"],
+      df["distance"]
+    )
+  }
+)
+tank_capacity = df["tank_capacity"].dropna().values[0]
+safety_margin = df["safety_margin"].dropna().values[0]
+max_purchase = df["max_purchase"].dropna().values[0]
+
+model = gp.Model("jet-fuel")
+
+x = model.addVars(cities, ub=max_purchase, vtype=GRB.CONTINUOUS, name="x")
+y = model.addVars(cities, ub=tank_capacity, vtype=GRB.CONTINUOUS, name="y")
+z = model.addVars(cities, lb=safety_margin, vtype=GRB.CONTINUOUS, name="z")
+
+model.setObjective(x.prod(fuel_cost), sense=GRB.MINIMIZE)
+model.addConstrs(
+  (z[i] + x[i] == y[i] for i in cities),
+  name='ground_balance'
+)
+model.addConstrs(
+  (y[pred[i]]
+    - (1 + 0.5 * (y[pred[i]] + z[i]) / 2000) * dist[i]
+   ==
+   z[i]
+   for i in cities),
+   name="air_balance"
+)
+
+model.optimize()
+
+print(f"Fuel cost: ${round(model.ObjVal, 0)}")
+for c in cities:
+    print("*" * 50)
+    print(f"Fuel at landing at {c}: {round(z[c].X, 0)} gal")
+    print(f"Fuel purchased at {c}: {round(x[c].X, 0)} gal")
+    print(f"Fuel at takeoff at {c}: {round(y[c].X, 0)} gal")
+
+* Include constraints to link variables where needed
+* Even constraints that look "recursive" are ok
+
+Non-negativity:
+* Don't leave these out if needed
+* Consider whether negative-valued variables may make
+  sense in the model
+
+Variable substitution/extra variables:
+* In jet fuel example:
+  * fuel purchased / at takeoff from / at landing at city i
+  * Ground balance: since z_i + x_i = y_i forall cities i,
+    you could eliminate y_i from the model entirely...
+    substitute z_i + x_i instead.
+    * or substitute for x_i or z_i also
+  * four models, all valid
+* Older times: do the substitution, since fewer vars
+  means less memory used, more speed
+* Newer times: more variables means better explainability,
+  solvers do a great job of pre-solving, simplifying
+  models where possible
+* If substituting, watch out for math (e.g. you substitute
+  y_i - z_i)...negative values for what would be x_i
+  * remember non-negativity constraints
+
+* predictive modeling to find data for model
+
+Quadratic objectives:
+e.g.
+import gurobipy as gp
+from gurobipy import GRB
+
+model = gp.Model("quadratic")
+# let `n` be some number of variables
+x = model.addVars(n, vtype=GRB.CONTINUOUS, name="x")
+
+# objective: minimize square of sum
+model.setObjective(x.sum() ** 2, sense=GRB.MINIMIZE)
+# n^2 multiplications, n^2 terms to add
+
+# another way:
+z = m.addVar(vtype=GRB.CONTINUOUS, name="z")
+model.addConstr(z == x.sum())
+model.setObjective(z ** 2, sense=GRB.MINIMIZE)
+# n terms to add, 1 multiplication
+
+e.g. regression objective:
+# number of data points: n
+# number of features: m
+# data points:
+# * features for each data point i: x_ij
+# * response for each data point i: y_i
+# variables: regression coefficients a_0, a_1, ..., a_m
+a = model.addVars(m + 1, lb=-GRB.INFINITY, name="coeffs")
+
+# objective: minimize sum of squared residuals
+model.setObjective(
+  gp.quicksum(
+    (y[i] - (a[0]
+              + gp.quicksum(
+                  a[j + 1] * x[i][j]
+		  for j in range(m)
+                )
+            )
+    ) ** 2
+    for i in range(n)
+  )
+)
+
+# make new vars for each residual
+z = model.addVars(n, lb=-GRB.INFINITY, name="residual")
+m.addConstrs(
+  (z[i] == (
+    y[i] - (
+      a[0] + gp.quicksum(
+        a[j + 1] * x[i][j] for j in range(m)
+      )
+    )
+  ) for i in range(n))
+)
+model.setObjective(gp.quicksum(z ** 2 for i in range(n)))
+
+e.g. quadratic constraints:
+vars x, y
+compact constraint: (x + y)^2 <= 10
+multiplied out: x^2 + 2xy + y^2 <= 10
+instead, new variable z:
+constraint: z = x + y
+constraint: z^2 <= 10
+
+
+

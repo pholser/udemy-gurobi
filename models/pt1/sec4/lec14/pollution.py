@@ -1,5 +1,4 @@
 from gurobipy import GRB
-from models import index_of
 import gurobipy as gp
 import importlib.resources as rsrc
 import json
