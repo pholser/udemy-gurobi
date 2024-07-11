@@ -1,0 +1,15 @@
+{
+  "acreage": 45,
+  "crops": [
+    {"name": "wheat",
+      "labor_hours_per_acre_planted": 3,
+      "tons_of_fertilizer_per_acre_planted": 2,
+      "profit_per_acre_planted": 2000},
+    {"name": "corn",
+      "labor_hours_per_acre_planted": 2,
+      "tons_of_fertilizer_per_acre_planted": 4,
+      "profit_per_acre_planted": 3000}
+  ],
+  "available_labor_hours": 100,
+  "available_tons_of_fertilizer": 120
+}
