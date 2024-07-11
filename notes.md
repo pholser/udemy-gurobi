@@ -868,5 +868,160 @@ instead, new variable z:
 constraint: z = x + y
 constraint: z^2 <= 10
 
+Reusability of models:
+* Use same model structure, on different days, situations,
+  instances
+* Read data from files instead of baking into gurobipy
+  code
+
+Infeasibility and debugging:
+e.g. industrial diamond purchasing
+* Three types of diamond drills made:
+    heavy-, medium-, light-duty
+* Three diamond suppliers supply mixes of diamonds usable
+  for different drill types:
+  * (1) ($3/kg): 40% heavy, 35% medium, 25% light
+  * (2) ($2.50/kg): 35% h, 55% m, 10% light
+  * (3) ($2.70/kg): 30, 30, 40
+* Purchase requirements:
+  * 1700 kg for heavy, 1200 kg for medium, 1800 kg for light
+
+* How much to buy from each supplier to meet needs,
+  at least cost?
+
+import gurobipy as gp
+from gurobipy import GRB
+
+# Data
+c = {0: 3.0, 1: 2.5, 2: 2.7}
+d = [1700, 1200, 1800]
+a = [
+  [0.4, 0.35, 0.3],
+  [0.35, 0.55, 0.3],
+  [0.25, 0.1, 0.4]
+]
+
+model = gp.Model("diamonds")
+
+# Decision: how much to buy from each supplier
+x = model.addVars(3, vtype=GRB.CONTINUOUS, name="x")
+
+# Objective: minimize total purchase cost
+model.setObjective(x.prod(c), sense=GRB.MINIMIZE)
+
+# Constraint: meet needs for each type of drill's diamonds
+needs_met = model.addConstrs(
+  (gp.quicksum(a[i][j] * x[j] for j in range(3)) >= d[i])
+  for i in range(3),
+  name="needs_met"
+)
+
+It turns out that if you change the demand constraints
+to be equality constraints, the model becomes infeasible --
+no possible solution meets all of the constraints.
+Causes:
+* model is infeasible
+* human error in writing model
+
+Using models to analyze sensitivity:
+e.g. Chemical manufacturing
+* A chemical company produces several types of chemicals
+  by running reactions on various machines
+* Company produces M types of chemicals by running
+  N different processes
+* Goal: produce all chemicals at minimum cost
+* Data science team estimates:
+  * demand forecast d_i for chemical i
+  * for each hour of runtime for process j,
+    a_ij gallons of chemical i is produced
+* Each process j costs c_j per hour to run
+
+import gurobipy as gp
+from gurobipy import GRB
+import json
+
+with open("chemicals.json") as f:
+    data = json.load(f)
+
+# Data
+M = data["M"]
+N = data["N"]
+demands = data["demands"]
+a = data["a"]
+costs = data["costs"]
+
+model = gp.Model("chemicals")
+
+# Decision: how many hours per day to run each process
+x = model.addVars(N, vtype=GRB.CONTINUOUS, name="x")
+
+# Constraints: meed demand for each chemical
+demand_constraints = model.addConstrs(
+    (
+        (gp.quicksum(a[i][j] * x[j] for j in range(N))
+         >=
+         demands[i]
+         for i in range(M))
+    ),
+    name="demand_constraints"
+)
+
+# Objective: minimize cost
+model.setObjective(
+    gp.quicksum(costs[j] * x[j] for j in range(N))
+)
+
+Result: process 1 0 hr, process 2 30 hr/day, $30K/day
+
+We want the process to run in <= 24 hr
+
+time_constraints = model.addConstrs(
+    (x[j] <= 24 for j in range(N)),
+    name="time_constraints"
+)
+
+Now, Result: process 1 2 hr, process 2 24 hr/day, $32K/day
+
+Option 1:
+* Install a second set of process 2 machinery for $1.5M
+* Allows original solution
+* Payback period: $1.5M / ($32K - $30K) = 750 days
+
+Sensitivity analysis: showing changes to solution as
+data changes
+
+What about demand uncertainty: What if demand drops 20%?
+* tweak the forecast data accordingly, re-run model
+
+Now, Result: process 1 0 hr, process 2 24 hr/day
+Total cost: $24K/day
+
+What happens with original forecasted demand, but process 2
+deteriorates by 10%?
+
+Result: process 1 6.8 hr/day, process 2 24 hr/day,
+  cost $51.2K/day
+
+--> Optimization results tell us that it's important to
+    keep process 2 machinery in good working order
+
+If process 2 deteriorates, should the company now install
+another set of process 2 machinery, at a cost of $1.5M?
+
+add another var for this: x_2A
+c_2A = $1000
+a_*,2A = [100, 100, 200]
+x_2A <= 24
+
+Now, Result: process 1 0 hr, process 2 6.667 hr/day,
+process 2A 24 hr/day
+cost: $30666.67/day
+payback period: 88 days
+
+OTOH, what if we take process 2A away, restore process 2
+to its previous non-deteriorated output, and take it down
+for 4 hr/day for preventive maintenance?
+
+--> P1 10 hr/day, P2 20 hr/day --> $60K/day!
 
 
