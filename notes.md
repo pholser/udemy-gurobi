@@ -1024,4 +1024,87 @@ for 4 hr/day for preventive maintenance?
 
 --> P1 10 hr/day, P2 20 hr/day --> $60K/day!
 
+Classification of models:
+x = vector of variables
+Min or max f(x)
+s.t. x in X
+
+LP:
+* f(x) is a linear function
+* constraint set X is defined by linear equations
+  and inequalities
+* easy and fast to solve even for large instances
+
+QP:
+* f(x) is a quadratic function
+* constraint set X is defined by linear equations
+  and inequalities
+* Gurobi solution speed depends on f(x)
+
+Convex QP:
+* f(x) is a quadratic convex function
+* constraint set X is defined by linear equations
+  and inequalities
+* Gurobi can solve these quickly
+
+Non-convex QP:
+* f(x) is a quadratic non-convex function
+* constraint set X is defined by linear equations
+  and inequalities
+* Gurobi can solve these, but it takes much longer
+
+QCP (quadratically constrained program), convex:
+* f(x) is a linear or quadratic function
+* constraint set X is defined by linear and quadratic
+  equations and inequalities
+* each of the constraints defines a convex set
+* Gurobi can solve these quickly
+
+QCP (quadratically constrained program), non-convex:
+* f(x) is a linear or quadratic function
+* constraint set X is defined by linear and quadratic
+  equations and inequalities
+* Constraints do not define a convex set
+* Gurobi can solve these, but it takes much longer
+
+MILP (mixed integer linear program):
+* f(x) is a linear function
+* constraint set X is defined by linear equations
+  and inequalities
+* Some variables are required to have integer values
+* (binary integer program: all variables are in {0, 1})
+* (pure integer program: all variables are integer)
+
+Combinations of all the above
+
+What if your problem is non-convex?
+* piecewise linear approximations
+* bounds to show quality
+* heuristics to get good solutions
+
+How models are solved (high-level):
+Two main steps:
+* Initialization: create a first solution
+  * can be simple/bad/infeasible
+* Iteration:
+  * Find an improving direction t
+  * Use a step size theta to move along it
+  * New solution = old solution + theta * t
+* Stop when solution:
+  * doesn't change much
+  * time runs out, or
+  * it's optimal or close enough to it
+
+Similar to gradient boosting
+
+Convex optimization problem:
+* Guaranteed to find optimal soln
+Non-convex problem:
+* Might converge to an infeasible soln
+  * Split into two subset models to exclude infeasible soln
+    and iterate
+  * Optimal soln is best soln over all subsets
+* Might converge to a local optimum
+  * Solve from multiple starting solutions
+
 

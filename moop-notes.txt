@@ -1,0 +1,270 @@
+Multi-objective Optimization Problems and Algorithms
+=====
+vs. single-objective:
+
+-- might min some objectives and max others
+   (but easy to convert one to the other)
+
+-- e.g. buying a fan during a hot summer:
+   -- minimize price
+   -- but also maximize comfort
+   -- minimize energy consumption?
+   -- efficiency?
+   -- ...
+
+The more objectives, the more difficult it is to find
+a good solution.
+
+Goals in MOO:
+-- Find set of solutions as close as possible to
+   Pareto-optimal front
+-- To find a set of solutions as diverse as possible
+
+How to compare two solutions of a MOOP?
+-- When is one solution better than another?
+   -- When soln A is better or equal in all the objectives
+
+e.g. ZDT1 benchmark function
+
+x_1
+x_2  ---->  ZDT1 ---> f_1(x^)
+...  ---->       ---> f_2(x^)
+x_n
+
+
+where:
+f_1(x^) = x_1
+f_2(x^) = g * (1 - sqrt(x_1 / g))
+g = 1 + (9 / (n - 1)) * sum[j in 2..n] { x_j }
+x_j in [0, 1]
+
+e.g. cantilever beam design
+
+design a steel beam of length l, diameter d,
+attached to a wall,
+apply a load P to unattached end
+
+minimize the weight of the beam
+  = rho * pi * d^2 * l / 4
+minimize the deflection of the unattached end
+  = (64 * p * l^3) / (3 * E * pi * d^4)
+
+load p = 1 kN
+density rho = 7800 kg/m^3
+elastic modulus E = 207E6 Gpa
+
+choose d in [0.01, 0.05] meters
+choose l in [0.2, 1] meters
+
+Search/parameter/decision variable space and objective space:
+-----
+e.g. fan comfort problem
+-- decision variable space: set of fans to consider
+-- objective space: values of the costs and comfort levels
+
+e.g. designing a fan:
+-- choose # blades, and length of blades   (search space)
+   [1, 2, ..., 9]        [2, 4, 5, 6, 8, 10]
+   -- so as to minimize cost, and maximize comfort
+                                           (objective space)
+
+|search| = |obj| = 9 * 6 = 54
+
+Search space and objective space of ZDT1:
+-- plot via MATLAB with probs of two or three vars
+
+Cantilever beam design problem with constraints:
+-----
+feasible vs. infeasible regions
+
+-- stress sigma <= 300000 kPa
+-- deflection delta <= 0.005 m
+
+-- penalize violating solutions by setting obj == inf
+
+Pareto optimal dominance and Pareto optimality:
+-----
+formulating a MOOP:
+min(f_1(x^), f_2(x^), ..., f_k(x^))
+s.t. x^ in X
+k >= 2, X is the set of feasible solns
+
+e.g. min(price(x^), -comfort(x^))
+
+Consider fan1 = (price_1, -comfort_1)
+and fan2 = (price_2, -comfort_2)
+
+Fan1 is better than fan2, or "dominates",
+iff one of the following hold:
+price_1 < price_2 and -comfort_1 < -comfort_2
+price_1 = price_2 and -comfort_1 < -comfort_2
+price_1 < price_2 and -comfort_1 = -comfort_2
+
+x^ is said to (Pareto-optimal) dominate another solution y^ iff:
+(1) f_i(x^) <= f_i(y^) for all i in {1, 2, ..., k}
+(2) f_i(x^) < f_i(y^) for at least one i in {1, 2, ..., k}
+
+Pareto optimal dominance is denoted as x^ curly-less-than y^
+
+Pareto optimality:
+-----
+x^ is said to be Pareto-optimal iff:
+there is no y^ in X such that y^ curly-less-than x^
+
+-- that is, there is no other feasible solution that
+   dominates x^.
+
+Pareto-optimal solution set and Pareto front:
+-----
+Pareto-optimal solution set: the set of points in the
+parameter space that project into the Pareto-optimal
+front in the objective space.
+
+
+Algorithms
+=====
+Classified based on a decision maker (DM):
+
+(1) No preference method: no DM
+
+(2) A-priori methods: a DM gives preferences before optimization
+
+(3) A-posteriori methods: find the best Pareto-optimal solutions,
+and then a DM chooses the best between them
+
+(4) Progressive methods: a DM guides the optimization process
+by giving preferences during optimization
+("interactive methods", "human-in-the-loop")
+
+
+No-preference methods: theory/coding
+-----
+Without a DM, we're making assumptions.
+
+Suppose we've got a feasible region, and a Pareto-optimal
+solution set.
+
+If there were a solution in the set that had minimum value
+for all the objectives of all points in the feasible region,
+that would be ideal -- it would dominate any other.
+
+Very likely, such a solution is infeasible. Call its
+objective value z_ideal.
+
+Find the solution that's "closest to" that ideal soln.
+(distance-wise)
+-->
+min ||f(x^) - z_ideal||
+s.t. x^ in X
+where f(x^) = f_1(x^), f_2(x^), ..., f_k(x^),
+X includes all the feasible solutions, and
+||.|| is any L^p norm.
+
+
+A-priori weighted sum method: theory
+-----
+min: F(x^) = w_1 * f_1(x^) + w_2 * f_2(x^)
+           + ...
+           + w_k * f_k(x^)
+where k = number of objectives, and
+w_1 + w_2 + ... + w_k = 1
+
+Becomes a single-objective problem.
+Minimizing F provides a sufficient condition for
+Pareto optimality, as long as all the weights
+are positive.
+
+With regards to the design space, minimizing the
+weighted sum provides a necessary condition
+if the multi- objective problem is convex, which means
+the feasible design space is convex (each constraint
+is convex) and all of the objective functions are convex
+(Geoffrion 1968; Koski 1985; Miettinen 1999).
+A function defined on a convex set is convex if and only if
+the Hessian matrix of the function is positive semidefinite
+or positive definite at all points in the set. Thus,
+if the Hessian matrix for each constraint and for each
+objective function is positive semidefinite or
+positive definite, then the weighted sum method
+can provide all Pareto optimal points (the complete
+Pareto optimal curve).
+
+Benefits:
+* Simple
+* Computationally cheap
+
+Drawbacks:
+* Multiple runs to create the PF
+  (run algo with differing weights)
+* Difficult to get a uniformly distributed PF
+* Changing the weights requires experts
+* Weights are always positive
+* No information exchange between solutions
+* Objectives with different scales
+* It is difficult to set the weight vectors to obtain
+  a Pareto-optimal solution in a desired region in the
+  objective space
+* It cannot find certain Pareto-optimal solutions in
+  the case of a nonconvex objective space
+
+
+A-posteriori weighted sum method: theory
+-----
+-- find the best Pareto-optimal solutions, then
+   decision maker chooses between them
+
+min: f_1(x^), f_2(x^), ..., f_k(x^)
+s.t. x^ in X
+where k >= 2, and set X includes all the
+feasible solutions
+
+using evolutionary algos:
+goals:
+* Accurate convergence: finding a set of solutions
+  as close as possible to Pareto-optimal front
+* High (uniform) convergence: finding a set of
+  solutions as diverse as possible
+* "convergence and coverage"
+
+Benefits:
+* Finding PF in one run
+* Information exchange between solutions
+* No need for weights
+* Finding any type of front
+
+Drawbacks:
+* Computationally expensive
+* Addressing conflicting objectives
+
+Here is a simple multi-objective evolutionary algo
+example:
+-----
+(1) start with a random population of feasible solns
+(2) choose two parents randomly
+(3) produce one child using crossover
+(4) mutate the child
+(5) if child dominates parent1:
+      * add child to new population
+    else if parent 1 dominates child:
+      * add parent1 to new population
+    else if child and parent1 are non-dominated
+      * add both of them to new population
+(6) repeat 2-5 to get a new population
+
+
+Progressive multi-objective methods: Theory
+-----
+
+
+
+
+
+
+
+
+
+
+
+
+
+.
