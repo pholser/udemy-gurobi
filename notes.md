@@ -1107,4 +1107,160 @@ Non-convex problem:
 * Might converge to a local optimum
   * Solve from multiple starting solutions
 
+Modeling complex situations with binary variables:
+e.g. stock market investment
+
+import gurobipy as gp
+from gurobipy import GRB
+
+m = gp.Model("stocks")
+
+# Data
+with open("data-stock-market.json") as f:
+    data = json.load(f)
+num_stocks = data["num_stocks"]
+investment_budget = data["budget"]
+expected_return = \
+    {i: data["relative_return"][i] for i in range(num_stocks)}
+Q = data["covariance_of_return"]
+
+# Decision: how much money to invest in each stock
+x = model.addVars(num_stocks, vtype=GRB.CONTINUOUS, name="x")
+
+# Constraint: stay within budget
+budget_constraint = m.addConstr(x.sum() <= investment_budget)
+
+# Objective: balance risk and return
+m.setObjective(
+  x.prod(r)
+  -
+  theta * gp.quicksum(
+      Q[i][j] * x[i] * x[j]
+      for i in range(n)
+      for j in range(n)
+  ),
+  sense=GRB.MAXIMIZE
+)
+
+What else might be needed?
+* Transaction cost t
+  * Broker fee per company invested in
+    (fixed cost regardless of how much money invested)
+--> Current set of vars isn't set up for this
+
+-->
+y = m.addVars(num_stocks, vtype=GRB.BINARY, name="y")
+add factor to objective: - rho * t * y.sum()
+
+# fixed charge
+
+# could add transaction costs to budget constraints
+
+# now, link vars: if invest in stock i, must pay transaction cost
+# if x_i >= 0, then y_i must be 1.
+# rather: if y_i = 0, then x_i must be zero.
+m.addConstrs(x_i <= budget * y_i for i in range(n))
+
+# could also use gurobi indicator constraints:
+for i in range(n):
+    m.addGenConstrIndicator(y[i], 0, x[i] == 0)
+
+Yes/no decisions and related constraints:
+e.g.
+import gurobipy as gp
+from gurobipy import GRB
+
+m = gp.Model("stocks")
+
+# Data
+with open("data-stock-market.json") as f:
+    data = json.load(f)
+num_stocks = data["num_stocks"]
+investment_budget = data["budget"]
+stocks = data["stocks"]
+energy_stocks = data["energy_stocks"]
+expected_return = \
+  {stock: data["relative_return"][i]
+   for i, stock in enumerate(stocks)}
+Q = data["covariance_of_return"]
+transaction_cost = {
+  stock: data["transaction_cost"]
+  for i, stock in enumerate(stocks)
+}
+
+# Decision: how much money to invest in each stock
+x = model.addVars(stocks, vtype=GRB.CONTINUOUS, name="x")
+y = model.addVars(stocks, vtype=GRB.BINARY, name="y")
+
+# Constraint: stay within budget
+budget_constraint = m.addConstr(x.sum() <= investment_budget)
+
+# Objective: balance risk and return
+m.setObjective(
+  x.prod(r)
+  -
+  theta * gp.quicksum(
+      Q[i][j] * x[i] * x[j]
+      for i in range(n)
+      for j in range(n)
+  )
+  -
+  rho * y.prod(t),
+  sense=GRB.MAXIMIZE
+)
+
+# Constraint: stay within budget
+budget_constraint = m.addConstr(
+  x.sum() <= investment_budget - y.prod(t)
+)
+
+# linking constraint: if not investing in stock i, then amt invested == 0
+for i in range(n):
+  m.addGenConstrIndicator(y[i], 0, x[i] == 0)
+
+What else might be needed?
+* Minimum investment, if any, in each stock
+  * Not worth investing $0.03 in a $600 stock
+
+Data: min_i = minimum amount invested in stock i, if any
+Constraint:
+  x_i >= min_i * y_i
+
+  * If y_i is 1, then x_i >= min_i
+  * If y_i is 0, then x_i >= 0
+    * and another constraint forces x_i <= 0,
+      so x_i == 0
+
+* Purchase whole shares
+Data: p_i = price per share of stock i
+Vars: z_i = shares of stock i purchased (integer)
+
+z = model.addVars(n, vtype=GRB.INTEGER, name="z")
+
+Add constraints:
+-- p_i * z_i >= min_i * y_i for all stocks i
+-- p_i * z_i == x_i for all stocks i
+
+Personal investment constraints:
+* Must invest in Tesla --> y["Tesla"] == 1
+* Invest in at least two of A, B, and C:
+  --> y[A] + y[B] + y[C] >= 2
+* Invest in exactly two of A, B, and C:
+  --> y[A] + y[B] + y[C] == 2
+* Either invest in A and B, or neither of A and B:
+  --> y[A] == y[B]
+* Opposite decisions for A and B:
+  --> y[A] == 1 - y[B]
+
+If/then constraints:
+e.g.
+If we invest in any energy stock, then invest in at least
+  five energy stocks.
+--> sum[j in energy_stocks] { y_j } >= 5 * y_i  forall energy stocks i
+
+alternatively:
+var w_energy = 1 if investing in energy, 0 if not.
+then:
+-- sum[j in energy_stocks] { y_j } >= 5 * w_energy
+-- w_energy >= y_j for all energy stocks j
 
