@@ -1264,3 +1264,27 @@ then:
 -- sum[j in energy_stocks] { y_j } >= 5 * w_energy
 -- w_energy >= y_j for all energy stocks j
 
+Using truth tables to troubleshoot constraints:
+v1  v2  ....   LHS   RHS   Constraint true?   Want this result?
+---------------------------------------------------------------
+
+Modeling logic using binary variables:
+with two binary vars a and b
+Basic building blocks:
+* AND: two things both have to happen    a + b == 2
+* OR: at least one of two things has to happen   a + b >= 1
+* XOR: exactly one of two things has to happen   a + b == 1
+* SAME: either both things happen, or neither happens   a == b
+* DIFFERENT: one happens and the other does not   a == 1 - b
+* IF-THEN: if the first one happens, so does the second
+           (if first does not happen, no restriction on second)
+    a <= b
+    gurobipy: m.addConstr(a <= b)
+      or
+      m.addConstr((a == 1) >> (b == 1))
+Sometimes if-then stated as contrapositive: if not b, then not a
+      (1 - b) <= (1 - a)
+      -->
+      a <= b
+
+
