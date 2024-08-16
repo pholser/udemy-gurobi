@@ -1287,4 +1287,11 @@ Sometimes if-then stated as contrapositive: if not b, then not a
       -->
       a <= b
 
+e.g. either invest in an auto company (Tesla or GM)
+ or invest in both Walmart and ExxonMobil
+
+() + () >= 1
+(y_T + y_GM) + (y_WM + y_EX) / 2 >= 1
+or
+2y_T + 2y_GM + y_WM + y_EX >= 2
 
