@@ -1295,3 +1295,4 @@ e.g. either invest in an auto company (Tesla or GM)
 or
 2y_T + 2y_GM + y_WM + y_EX >= 2
 
+e.g. rolling-horizon power generation:
