@@ -1,0 +1,7 @@
+{
+
+	"Countries": ["Argentina", "Bolivia", "Brazil", "Chile", "Columbia", "Ecuador", "French Guiana", "Guyana", "Paraguay", "Peru", "Suriname", "Uruguay", "Venezuela"],
+
+	"Adjacencies": [["Argentina", "Chile"], ["Argentina", "Bolivia"], ["Argentina", "Brazil"], ["Argentina", "Paraguay"], ["Argentina", "Uruguay"], ["Bolivia", "Brazil"], ["Bolivia", "Chile"], ["Bolivia", "Paraguay"], ["Bolivia", "Peru"], ["Brazil", "Columbia"], ["Brazil", "French Guiana"], ["Brazil", "Guyana"], ["Brazil", "Paraguay"], ["Brazil", "Peru"], ["Brazil", "Suriname"], ["Brazil", "Uruguay"], ["Brazil", "Venezuela"], ["Chile", "Peru"], ["Columbia", "Ecuador"], ["Columbia", "Peru"], ["Columbia", "Venezuela"], ["Ecuador", "Peru"], ["French Guiana", "Suriname"], ["Guyana", "Suriname"], ["Guyana", "Venezuela"]]
+
+}

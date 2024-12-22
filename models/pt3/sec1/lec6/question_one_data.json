@@ -1,0 +1,15 @@
+{
+
+	"Projects": ["Park", "Potholes", "City Hall", "EV", "Tax", "Property", "Police"],
+
+	"Council": ["A", "B", "C", "D", "E", "F", "G"],
+
+	"Suggested": {"A": ["Park", "Potholes", "Tax"], "B": ["Potholes", "Property", "Police"], "C": ["Park", "Police"], "D": ["Potholes", "EV"], "E": ["Park", "City Hall", "EV"], "F": ["Potholes", "Tax"], "G": ["Tax", "Property", "Police"]},
+
+	"Costs": {"Park": 6, "Potholes": 12, "City Hall": 2.4, "EV": 4, "Tax": 3, "Property": 18, "Police": 1},
+
+	"Surplus": 20,
+
+	"Beneficiaries": {"Park": 20000, "Potholes": 200000, "City Hall": 500, "EV": 16000, "Tax": 10000, "Property": 100000, "Police": 25000}
+
+}

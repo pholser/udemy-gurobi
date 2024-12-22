@@ -1296,3 +1296,102 @@ or
 2y_T + 2y_GM + y_WM + y_EX >= 2
 
 e.g. rolling-horizon power generation:
+
+How much power should each in a set of power plants produce each day
+to meet varying demand?
+-- at min cost
+-- meet emission restrictions
+   -- monthly limit, cannot exceed
+   -- daily limit, can exceed <= 7x/month, no more than 3 days in a row
+      in any month; fine when exceeded
+-- plan one month in advance (30 days)
+
+
+import gurobipy as gp
+import json
+
+model = gp.Model("electricity")
+with open("electricity.json", "r") as f:
+    data = json.load(f)
+
+n_days = data["num_days"]
+n_plants = data["num_plants"]
+demand = data["demand"]
+max_out = data["max_power_output"]
+pollution = data["pollution"]
+cost = data["cost"]
+
+month_limit = data["monthly_emission_limit"]
+daily_limit = data["daily_emission_limit"]
+fine = data["fine"]
+
+# How much power to produce at each plant each day?
+z = model.addVars(n_plants, n_days)
+
+# Pay fine on day d or no?
+y = model.addVars(n_days, vtype=gp.GRB.BINARY)
+
+# Minimize total cost
+model.setObjective(
+    gp.quicksum(cost[i] * z[i, d] \
+    for d in range(n_days) \
+    for i in range(n_plants) \
+    + fine * y.sum()
+)
+
+# Meet power demand each day
+model.addConstrs((z.sum("*", d) >= demand[d] for d in range(n_days)))
+# Respect power production capacity
+model.addConstrs((z[i, d] <= max_out[i] \
+    for i in range(n_plants) \
+    for d in range(n_days)))
+
+# Respect monthly emission limit
+model.addConstr(
+    gp.qucksum(pollution[i] * z[i, d] \
+    for d in range(n_days) \
+    for i in range(n_plants)) <= month_limit
+)
+
+# Respect daily emissions limit
+m.addConstr(y.sum() <= 7)
+m.addConstr(y[1] + y[2] + y[3] + y[4] <= 3)
+m.addConstr(y[2] + y[3] + y[4] + y[5] <= 3)
+...
+# or
+m.addConstrs((y[j] + y[j+1] + y[j+2] + y[j+3] <= 3 for j in range(n_days - 3)))
+
+# Which days are above emission limit?
+
+# If total emissions is more than E, then y_d must be 1
+m.addConstrs(((gp.quicksum(poll[i, d] * z[i, d] for i in range(n_plants)) <= daily_limit + monthly_limit * y[i, d]) for d in range(n_days)))
+
+Can they plan 30 days ahead?
+
+Rolling-horizon model:
+Solve model every week or day, each time looking a month ahead
+
+Adjust model after each day
+
+
+(1) orchestration
+(2) [smart-tl] incorporate forecasting loads into dispatching
+(3) [smart-tl] coordinate output driver states (from end of dispatching)
+    to be read in by load acceptance
+
+forecasting file -- download, and for use in engine
+-- grab a LA run, dispatching run starting at same time, how to (3)
+-- include only forecasted loads from that booking time after sim start time
+
+-- turn forecasting on in dispatching
+
+-- booking time == expected arrival time
+-- load acceptance == i have that time
+
+output driver states, how to stitch together
+
+driver pre dispatch states file
+write a dynamic driver file before i'm done
+
+drivers out of original dispatch horizon but will be available during
+LA

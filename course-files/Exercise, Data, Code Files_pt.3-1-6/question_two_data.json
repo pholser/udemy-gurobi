@@ -1,0 +1,10 @@
+{
+
+	"Items": 8,
+	"Heirs": 3,
+	"Art": [0,1,6],
+	"Value": [145, 120, 115, 135, 32, 123, 15, 17],
+	"Ideal": 234,
+
+	"ItemNames": ["Painting", "Sculpture", "Stamps", "Necklace", "Truck", "Stocks", "Bass Clarinet", "Baseball Memorabilia"]
+}
