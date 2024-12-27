@@ -1395,3 +1395,16 @@ write a dynamic driver file before i'm done
 
 drivers out of original dispatch horizon but will be available during
 LA
+
+k e   k||e  t
+0 0    0    0  -> true    0    0   *
+0 0    0    1  -> true    0    2   *
+0 1    1    0  -> false   1    0
+0 1    1    1  -> true    1    2   *
+1 0    1    0  -> false   1    0
+1 0    1    1  -> true    1    2   *
+1 1    1    0  -> false   2    0
+1 1    1    1  -> true    2    2   *
+
+
+

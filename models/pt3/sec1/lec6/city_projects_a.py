@@ -1,14 +1,9 @@
 from gurobipy import GRB
+from models.data_manipulation.arrays import array_to_indices, dict_to_array
 import gurobipy as gp
 import importlib.resources as rsrc
 import json
 
-
-def array_to_indices(arr, index):
-    return tuple(index[i] for i in arr)
-
-def dict_to_array(source, keys):
-    return [source.get(k, None) for k in keys]
 
 
 data_file_path = rsrc.files("models.pt3.sec1.lec6").joinpath("question_one_data.json")
