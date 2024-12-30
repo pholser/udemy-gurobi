@@ -1,0 +1,14 @@
+{
+    "Items": [
+        {"Name": "Painting", "Value": 145, "Art": 1},
+        {"Name": "Sculpture", "Value": 120, "Art": 1},
+        {"Name": "Stamps", "Value": 115, "Art": 0},
+        {"Name": "Necklace", "Value": 135, "Art": 0},
+        {"Name": "Truck", "Value": 32, "Art": 0},
+        {"Name": "Stocks", "Value": 123, "Art": 0},
+        {"Name": "Bass Clarinet", "Value": 15, "Art": 1},
+        {"Name": "Baseball Memorabilia", "Value": 17, "Art": 0}
+    ],
+	"Heirs": 3,
+	"Ideal": 234
+}
