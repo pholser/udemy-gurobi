@@ -1396,19 +1396,3 @@ write a dynamic driver file before i'm done
 drivers out of original dispatch horizon but will be available during
 LA
 
-
-Let x_ih = 1 if item i is given to heir h.
-Let v_h = sum[i in I] { i.value * x_ih } for all h in H.
-Let ideal = the ideal split value.
-
-Then
-
-minimize sum[h in H] { (ideal - v_h)^2 }
-
-Subject to:
-# each item given to exactly one heir
-sum[h in H] { x_ih } = 1 for all i in I
-
-# each music/art item must be given to a different heir
-sum[i in I where I is art/music] { x_ih } == 1 for all h in H
-
