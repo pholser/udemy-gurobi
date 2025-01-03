@@ -1,0 +1,121 @@
+{
+	"Experts": [
+		{
+			"Familiarity": "Expert user",
+			"Experience": 12,
+			"Level": "Director",
+			"Country": "USA",
+			"Cost": 1000
+		},
+
+		{
+			"Familiarity": "Occasional user",
+			"Experience": 30,
+			"Level": "VP",
+			"Country": "USA",
+			"Cost": 3000
+		},
+
+		{
+			"Familiarity": "None",
+			"Experience": 7,
+			"Level": "Senior Analyst",
+			"Country": "India",
+			"Cost": 300
+		},
+
+		{
+			"Familiarity": "Occasional user",
+			"Experience": 22,
+			"Level": "Director",
+			"Country": "UK",
+			"Cost": 1000
+		},
+
+		{
+			"Familiarity": "Expert user",
+			"Experience": 14,
+			"Level": "Director",
+			"Country": "USA",
+			"Cost": 1800
+		},
+
+		{
+			"Familiarity": "Expert user",
+			"Experience": 9,
+			"Level": "Senior Analyst",
+			"Country": "India",
+			"Cost": 400
+		},
+
+		{
+			"Familiarity": "None",
+			"Experience": 25,
+			"Level": "VP",
+			"Country": "UK",
+			"Cost": 1500
+		},
+
+		{
+			"Familiarity": "Expert user",
+			"Experience": 3,
+			"Level": "Analyst",
+			"Country": "UK",
+			"Cost": 300
+		},
+
+		{
+			"Familiarity": "Occasional user",
+			"Experience": 12,
+			"Level": "Senior Analyst",
+			"Country": "USA",
+			"Cost": 1000
+		},
+
+		{
+			"Familiarity": "Expert user",
+			"Experience": 10,
+			"Level": "Director",
+			"Country": "India",
+			"Cost": 800
+		}
+	],
+
+	"Familiarities": [
+		{
+			"Description": "Expert user",
+			"Minimum": 2,
+			"Maximum": 3
+		},
+		{
+			"Description": "Occasional user",
+			"Minimum": 1,
+			"Maximum": 2
+		},
+		{
+			"Description": "None",
+			"Minimum": 1,
+			"Maximum": 1
+		}
+	],
+
+	"Experience Categories": [
+		{
+			"Name": "Low",
+			"Range": [0,9]
+		},
+		{
+			"Name": "Medium",
+			"Range": [10,20]
+		},
+		{
+			"Name": "High",
+			"Range": [21,100]
+		}
+	],
+
+	"Levels": ["Analyst", "Senior Analyst", "Director", "VP"],
+
+	"Countries": ["India", "UK", "USA"]
+
+}
