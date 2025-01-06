@@ -1374,25 +1374,8 @@ Solve model every week or day, each time looking a month ahead
 Adjust model after each day
 
 
-(1) orchestration
+
 (2) [smart-tl] incorporate forecasting loads into dispatching
 (3) [smart-tl] coordinate output driver states (from end of dispatching)
     to be read in by load acceptance
-
-forecasting file -- download, and for use in engine
--- grab a LA run, dispatching run starting at same time, how to (3)
--- include only forecasted loads from that booking time after sim start time
-
--- turn forecasting on in dispatching
-
--- booking time == expected arrival time
--- load acceptance == i have that time
-
-output driver states, how to stitch together
-
-driver pre dispatch states file
-write a dynamic driver file before i'm done
-
-drivers out of original dispatch horizon but will be available during
-LA
 
