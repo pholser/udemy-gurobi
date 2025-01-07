@@ -1374,8 +1374,53 @@ Solve model every week or day, each time looking a month ahead
 Adjust model after each day
 
 
+Optimization modeling archetypes
+=====
+Knapsack model:
+import gurobipy as gp
+import json
+model = gp.Model("knapsack")
+with open("data-knapsack.json", "r") as f:
+    data = json.load(f)
+N = data["number_of_items"]
+v = data["values"]
+w = data["weight"]
+K = data["capacity"]
 
-(2) [smart-tl] incorporate forecasting loads into dispatching
-(3) [smart-tl] coordinate output driver states (from end of dispatching)
-    to be read in by load acceptance
+x = model.addVars(N, vtype=gp.GRB.BINARY, name="x")
+
+model.setObjective(
+    gp.quicksum(x[j] * v[j] for j in range(N),
+    sense=gp.GRB.MAXIMIZE
+)
+
+capacity_constraint = model.addConstr(
+    gp.quicksum(x[j] * s[j] for j in range(N)) <= K
+)
+
+
+Set covering model:
+import gurobipy as gp
+import json
+model = gp.Model("set-covering")
+with open("data-setcover.json", "r") as f:
+    data = json.load(f)
+
+N = data["number_of_items"]
+C = data["cost"]
+S = data["attributes"]
+# S_i = set of items with attribute i
+
+# Choose an item or not
+x = model.addVars(N, vtype=gp.GRB.BINARY, name="x")
+
+# Least costly choices
+model.setObjective(x.prod(C))
+
+# Choose at least one item with each attribute
+for attr, books in S.items():
+    model.addConstr(
+        x.sum(books) >= 1,
+	name=f"{attr}_chosen_constraint"
+    )
 

@@ -1,0 +1,48 @@
+{
+	"areas": {
+	    "A": "Writing",
+	    "B": "Math",
+	    "C": "Computing",
+	    "D": "History",
+	    "E": "Economics",
+	    "F": "Ethics",
+	    "G": "Science",
+	    "H": "Civics",
+	    "I": "Literature",
+	    "J": "International"
+	},
+
+	"courses": [
+	    "American_history_and_government",
+	    "Ancient_world_history",
+	    "Bioethics_in_science_fiction",
+	    "Calculus_for_science_applications",
+	    "Computational_complexity",
+	    "Computational_voting_theory",
+	    "Contemporary_social_issues",
+	    "Economic_development_of_the_world",
+	    "Economic_history_of_the_US",
+	    "History_and_technology_in_the_works_of_Neal_Stephenson",
+	    "Impact_of_bitcoin_mining_around_the_world",
+	    "Mathematical_modeling_of_social_issues",
+	    "Space_time_and_reality",
+	    "Thomas_Sowell_writings_and_biographies"
+	],
+
+	"courses_areas": {
+	    "American_history_and_government": ["A", "D", "H"],
+	    "Ancient_world_history": ["D", "J"],
+	    "Bioethics_in_science_fiction": ["A", "F", "G", "I"],
+	    "Calculus_for_science_applications": ["B", "G"],
+	    "Computational_complexity": ["B", "C"],
+	    "Computational_voting_theory": ["C", "H"],
+	    "Contemporary_social_issues": ["A", "F"],
+	    "Economic_development_of_the_world": ["A", "D", "E", "J"],
+	    "Economic_history_of_the_US": ["D", "E"],
+	    "History_and_technology_in_the_works_of_Neal_Stephenson": ["B", "C", "D", "I"],
+	    "Impact_of_bitcoin_mining_around_the_world": ["A", "C", "E", "F", "J"],
+	    "Mathematical_modeling_of_social_issues": ["B", "F", "H"],
+	    "Space_time_and_reality": ["A", "F", "G"],
+	    "Thomas_Sowell_writings_and_biographies": ["A", "D", "E", "I", "J"]
+	}
+}

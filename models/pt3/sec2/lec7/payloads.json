@@ -1,0 +1,14 @@
+{
+    "payloads": [
+        {"name": "A", "revenue": 15, "weight": 100},
+        {"name": "B", "revenue": 12, "weight": 80},
+        {"name": "C", "revenue": 9, "weight": 70},
+        {"name": "D", "revenue": 17, "weight": 130},
+        {"name": "E", "revenue": 23, "weight": 250},
+        {"name": "F", "revenue": 3, "weight": 10},
+        {"name": "G", "revenue": 8, "weight": 20},
+        {"name": "H", "revenue": 4, "weight": 30},
+        {"name": "I", "revenue": 10, "weight": 70}
+    ],
+    "max-weight": 350
+}
