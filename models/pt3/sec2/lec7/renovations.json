@@ -1,0 +1,11 @@
+{
+    "renovations": [
+        {"name": "New roof", "cost": 10, "resale-value": 12},
+        {"name": "New kitchen", "cost": 30, "resale-value": 45},
+        {"name": "New bathrooms", "cost": 20, "resale-value": 28},
+        {"name": "New HVAC", "cost": 15, "resale-value": 18},
+        {"name": "New floors", "cost": 38, "resale-value": 70},
+        {"name": "Landscaping", "cost": 6, "resale-value": 10}
+    ],
+    "budget": 75
+}
