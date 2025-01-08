@@ -1,0 +1,72 @@
+{
+    "areas": [
+        "A - Writing",
+        "B - Math",
+        "C - Computing",
+        "D - History",
+        "E - Economics",
+        "F - Ethics",
+        "G - Science",
+        "H - Civics",
+        "I - Literature",
+        "J - International"
+    ],
+    "courses": [
+        {
+            "name": "American History and Government",
+            "applicable-areas": [0, 3, 7]
+        },
+        {
+            "name": "Ancient World History",
+            "applicable-areas": [3, 9]
+        },
+        {
+            "name": "Bioethics in Science Fiction",
+            "applicable-areas": [0, 5, 6, 8]
+        },
+        {
+            "name": "Calculus for Science Applications",
+            "applicable-areas": [1, 6]
+        },
+        {
+            "name": "Computational Complexity",
+            "applicable-areas": [1, 2]
+        },
+        {
+            "name": "Computational Voting Theory",
+            "applicable-areas": [2, 7]
+        },
+        {
+            "name": "Contemporary Social Issues",
+            "applicable-areas": [0, 5]
+        },
+        {
+            "name": "Economic Development of the World",
+            "applicable-areas": [0, 3, 4, 9]
+        },
+        {
+            "name": "Economic History of the US",
+            "applicable-areas": [3, 4]
+        },
+        {
+            "name": "History and Technology in the Works of Neal Stephenson",
+            "applicable-areas": [1, 2, 3, 8]
+        },
+        {
+            "name": "Impact of Bitcoin Mining Around the World",
+            "applicable-areas": [0, 2, 4, 5, 9]
+        },
+        {
+            "name": "Mathematical Modeling of Social Issues",
+            "applicable-areas": [1, 5, 7]
+        },
+        {
+            "name": "Space, Time, and Reality",
+            "applicable-areas": [0, 5, 6]
+        },
+        {
+            "name": "Thomas Sowell: Writings and Biographies",
+            "applicable-areas": [0, 3, 4, 8, 9]
+        }
+    ]
+}

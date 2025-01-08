@@ -1418,8 +1418,9 @@ x = model.addVars(N, vtype=gp.GRB.BINARY, name="x")
 model.setObjective(x.prod(C))
 
 # Choose at least one item with each attribute
-for attr, books in S.items():
+for attr, items_with_attr in S.items():
     model.addConstr(
-        x.sum(books) >= 1,
+        x.sum(items_with_attr) >= 1,
 	name=f"{attr}_chosen_constraint"
     )
+
