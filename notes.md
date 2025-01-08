@@ -1423,4 +1423,3 @@ for attr, books in S.items():
         x.sum(books) >= 1,
 	name=f"{attr}_chosen_constraint"
     )
-
