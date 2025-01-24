@@ -1,0 +1,17 @@
+{
+
+	"NumPapers": 3,
+
+	"Papers": ["High-grade", "Newspaper", "Telephone books"],
+
+	"OldPulpQualities": [95, 40, 65],
+
+	"NewPulpMinimums": [90, 35, 60],
+
+	"NewPulpMaximums": [1000, 50, 10000],
+
+	"PaperReceived": [10, 100, 20],
+
+	"SellPrice": [40, 10, 20]
+
+}

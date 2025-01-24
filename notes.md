@@ -1424,3 +1424,88 @@ for attr, items_with_attr in S.items():
 	name=f"{attr}_chosen_constraint"
     )
 
+Blending archetype:
+Combining raw materials into finished products
+-- Raw material types
+-- Finished product types
+-- Attributes of the above
+   -- e.g. sugar content, filtration level, ...
+-- Limits on availability of raw material
+-- Limits on production
+   -- target range for each attribute
+-- Final product attr amounts are weighted average of
+   raw materials
+   e.g. 40% apples with 12% sugar
+      + 60% apples with 15% sugar
+      ---------------------------
+juice has 40% * 12% + 60% * 15% = 13.8% sugar
+
+import gurobipy as gp
+import json
+model = gp.Model("blend")
+with open("data-blend.json", "r") as f:
+    data = json.load(f)
+
+NR = data["num_raw_materials"]
+NF = data["num_products"]
+NA = data["num_attributes"]
+c = dict(data["cost_of_raw_materials"])
+L = dict(data["availability_of_raw_materials"])
+r = dict(data["revenue_of_product_per_unit"])
+m = dict(data["min_product_to_make"])
+M = dict(data["max_product_to_make"])
+a = {(i, k): data["attribute_set_per_product"][i][k]
+     for i in range(NR)
+     for k in range(NA)
+    }
+p = np.array(data["min_attribute_requirement"])
+P = np.array(data["max_attribute_requirement"])
+
+# decide: how much of raw material i to use in making final product j
+x = model.addVars(NR, NF, vtype=gp.GRB.CONTINUOUS, name="x")
+
+# maximize revenue from made product minus cost of raw materials
+model.setObjective(
+  (
+    gp.quicksum(r[prd] * x.sum("*", prd) for prd in range(NF))
+    -
+    gp.quicksum(c[raw] * x.sum(raw, "*") for raw in range(NR))
+  ),
+  sense=gp.GRB.MAXIMIZE
+)
+
+# can't use more raw material than available
+model.addConstrs(
+  (x.sum(raw, "*") <= L[raw] for raw in range(NR))
+)
+
+# limits on final product made
+for prd in range(NF):
+  model.addConstr(x.sum("*", prod) >= m[prd])
+  model.addConstr(x.sum("*", prod) <= M[prd])
+
+# Blending constraints:
+# Each product must have the right amount of each attribute
+model.addConstrs(
+  gp.quicksum(a[raw, att] * x[raw, prod] for raw in range(NR))
+  >=
+  p[prd, att] * x.sum("*", prd)
+  for prd in range(NF)
+  for att in range(NA)
+)
+
+model.addConstrs(
+  gp.quicksum(a[raw, att] * x[raw, prod] for raw in range(NR))
+  >=
+  p[prd, att] * x.sum("*", prd)
+  for prd in range(NF)
+  for att in range(NA)
+)
+model.addConstrs(
+  gp.quicksum(a[raw, att] * x[raw, prod] for raw in range(NR))
+  <=
+  P[prd, att] * x.sum("*", prd)
+  for prd in range(NF)
+  for att in range(NA)
+)
+
