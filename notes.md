@@ -1509,3 +1509,35 @@ model.addConstrs(
   for att in range(NA)
 )
 
+Cutting-stock archetype:
+e.g. Cutting rolls of paper to fulfill customer orders
+* Mfg produces large rolls of one size
+* Customer want smaller rolls of different sizes
+* The demanded rolls result in some amount of waste
+
+Start with a set of "patterns" for cutting.
+e.g. if Mfg makes 8000ft rolls:
+* 8 * 1000ft
+* 10 * 750ft + 1 * 500ft
+* 7 * 1000ft + 2 * 450ft (50ft scrap)
+* ...
+
+import gurobipy as gp
+from gurobipy import GRB
+import json
+with open("cutting_stock.json", "r") as f:
+    data = json.load(f)
+
+patterns = data["patterns"]
+widths = data["widths"]
+a = data["a"]  # a[i, j] = number of rolls of size j created using pattern i
+costs = data["costs"]  # c_i = cost, including scrap, of pattern i
+demands = data["demands"]  # d_j = demand for rolls of width j
+
+model = gp.Model("cutting_stock)
+
+x = m.addVars(
+  len(patterns),
+  vtype=GRB.INTEGER,
+  obj=costs
+)
