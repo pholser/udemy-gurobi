@@ -1534,7 +1534,7 @@ a = data["a"]  # a[i, j] = number of rolls of size j created using pattern i
 costs = data["costs"]  # c_i = cost, including scrap, of pattern i
 demands = data["demands"]  # d_j = demand for rolls of width j
 
-model = gp.Model("cutting_stock)
+model = gp.Model("cutting_stock")
 
 x = m.addVars(
   len(patterns),
