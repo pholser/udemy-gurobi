@@ -1,0 +1,13 @@
+2. A float glass manufacturer produces sheets of glass that are a standard thickness and width, and
+are 10 feet long. From these sheets of glass, the manufacturer cuts window panes that are 3, 5,
+or 6 feet long. List all of the patterns of windows that can be cut from a 10-foot sheet into
+combinations of 3, 5, and 6 feet. List both complete patterns and incomplete patterns.
+
+(3) -> 7
+(3, 3) -> 4
+(3, 3, 3) -> 1, complete
+(5) -> 5
+(5, 5) -> complete
+(6) -> 4
+(3, 5) -> 2, complete
+(3, 6) -> 1, complete

@@ -1536,8 +1536,22 @@ demands = data["demands"]  # d_j = demand for rolls of width j
 
 model = gp.Model("cutting_stock")
 
-x = m.addVars(
+# Number of large rolls cut using pattern i
+x = model.addVars(
   len(patterns),
+  lb=0,
   vtype=GRB.INTEGER,
-  obj=costs
+  obj=costs   # min sum[i in 1..len(patterns)] { costs[i] * x[i] }
 )
+
+# meet demands
+meet_demands = model.addConstrs(
+  (gp.quicksum(a[i][j] * x[i] for i in range(len(patterns)))
+  >=
+  demands[j]
+  for j in range(len(widths))
+)
+
+Bin packing archetype:
+e.g. packing boxes onto trucks
+

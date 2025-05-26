@@ -1,0 +1,7 @@
+1. A carpet manufacturer produces rolls of carpet of a standard width. Each roll is 200 feet long.
+Their B2B customers purchase carpet in lengths of 50 feet, 75 feet, or 100 feet. List all of the
+patterns of carpet that can be cut from a 200-foot roll into combinations of 50, 75, and 100 feet
+plus scrap (if any), e.g., "two 50-foot rolls and one 100-foot roll". Separate "complete patterns"
+(that don't have enough scrap to add another roll) from “incomplete” patterns – for example, a
+pattern of “three 50-foot rolls” has excess that is large enough to be used for another 50-foot
+roll, so it would be considered “incomplete”.
