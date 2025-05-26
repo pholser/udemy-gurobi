@@ -1,0 +1,20 @@
+6. A moving company has large moving trucks that it uses to carry customers' belongings from one
+city to another. The moving company charges customers at three different levels: a full truck, a
+half truck, and a quarter-truck. Customers are charged as the smallest level they can fit into.
+(So, a customer whose belongings take 0.4 truck volume would be charged as a half-truck.) List
+all of the patterns of load levels (full, half, quarter) that can fit into a truck.
+
+Complete:
+full
+half half
+half quarter quarter
+quarter quarter quarter quarter
+
+Incomplete:
+half
+half quarter
+quarter
+quarter quarter
+quarter quarter quarter
+
+https://www.youtube.com/watch?v=z8wllSQF_gM
