@@ -10,6 +10,8 @@ gurobipy==11.0.2
     #   gurobipy-pandas
 gurobipy-pandas==1.1.2
     # via -r requirements.in
+networkx==3.5
+    # via -r requirements.in
 numpy==2.0.0
     # via pandas
 pandas==2.2.2

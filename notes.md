@@ -1555,3 +1555,55 @@ meet_demands = model.addConstrs(
 Bin packing archetype:
 e.g. packing boxes onto trucks
 
+Network model archetype:
+* Nodes/vertices, represent "locations"
+* Arcs/edges, represent "connections"
+* Each node has a "supply" (entering into network of connections)
+  or "demand" (exiting from network of connections), each
+  >= 0
+* Total demand must == total supply
+* Every arc has a "capacity", and cost per unit
+
+N = {n_1, n_2, ..., n_i}
+A = {(i, j): there is an arc from node i to node j}
+
+x_ij = amount sent on arc (i, j), >= 0
+
+objective: min total cost
+
+balance constraints: at each node, flow in == flow out
+capacity constraints: on each arc, send no more than its capacity
+
+import gurobipy as gp
+from gurobipy import GRB
+import networkx as nx
+
+model = gp.Model("network_optimization")
+G = nx.read_graphm1("graph.graphm1")
+
+nodes, demands = gp.multidict(
+  {n[0]: [n[1]["demand"]]
+   for n in G.nodes(data=True)}
+)
+
+edges, cost, capacity = gp.multidict(
+  {(e[0], e[1]): [e[2]["cost"], e[2]["capacity"]]
+   for e in G.edges(data=True)}
+)
+
+x = model.addVars(
+  edges,
+  obj=cost,
+  lb=0.0,
+  name="x"
+)
+
+balance_constraints = model.addConstrs(
+  (x.sum("*", k) == x.sum(k, "*") + demands[k]
+   for k in nodes)
+)
+
+capacity_constraints = model.addConstrs(
+  (x.sum(i, j) <= capacity[i, j] for i, j in edges)
+)
+
