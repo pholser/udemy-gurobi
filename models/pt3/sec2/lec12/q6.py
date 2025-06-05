@@ -11,49 +11,61 @@ with rsrc.as_file(data_file_path) as p:
         data = json.load(stream)
 
 # Data
-ratings = data["ratings"]
-profs = data["profs"]
-prof_loads = data["loads"]
-courses = data["courses"]
-course_needs = data["needs"]
+"""
+{
+	"players": ["A", "B", "C", "D", "E", "F"],
+
+	"positions": ["Center", "Power Forward", "Small Forward", "Shooting Guard", "Point Guard", "Sixth Player"],
+
+	"values": [ 
+		[5,4,2,3,3,2], [8,6,4,2,2,4],
+		[8,5,2,1,1,4], [4,4,5,8,7,4],
+		[1,2,4,10,8,5], [1,1,2,3,6,2] ]
+}
+
+"""
+players = data["players"]
+positions = data["positions"]
+player_values_for_position = data["values"]
 
 # Model
-model = gp.Model("courses")
+model = gp.Model("basketball_team")
 
 # Decisions
-# How fo I pair up professors and courses?
-prof_course_assignment = model.addVars(
-    profs,
-    courses,
-    vtype=GRB.INTEGER
+# How should I assign players to positions?
+player_at_position = model.addVars(
+    players,
+    positions,
+    vtype=GRB.BINARY
 )
 
 # Objective
-# Maximize student rating
+# Maximize perceived value
 model.setObjective(
-    sum(ratings[profs.index(p)][courses.index(c)] * prof_course_assignment[p, c]
-        for p in profs
-        for c in courses),
+    sum(player_values_for_position[players.index(p)][positions.index(q)]
+        * player_at_position[p, q]
+        for p in players
+        for q in positions),
     sense=GRB.MAXIMIZE
 )
 
 # Constraints
-prof_loads_respected = model.addConstrs(
-    (prof_course_assignment.sum(p, "*") == prof_loads[profs.index(p)]
-     for p in profs)
+one_position_per_player = model.addConstrs(
+    (player_at_position.sum(p, "*") == 1
+     for p in players)
 )
 
-course_needs_respected = model.addConstrs(
-    (prof_course_assignment.sum("*", c) == course_needs[courses.index(c)]
-     for c in courses)
+one_player_per_position = model.addConstrs(
+    (player_at_position.sum("*", q) == 1
+     for q in positions)
 )
 
 # Solve
 model.optimize()
 
 # Results
-for p in profs:
-    for c in courses:
-        if prof_course_assignment[p, c].X > 0.5:
-            print(f"Professor {p} teaches course {c}")
-print(f"Rating: {model.objVal}")
+for p in players:
+    for q in positions:
+        if player_at_position[p, q].X > 0.5:
+            print(f"Player {p} at position {q}")
+print(f"Value: {model.objVal}")
