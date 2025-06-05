@@ -1,0 +1,66 @@
+{
+	"Nodes": [ "Yellowstone N.P., WY", "Livingston, MT", "Butte, MT",
+		"Missoula, MT", "Idaho Falls, ID", "Boise, ID", "Twin Falls, ID",
+		"Salt Lake City, UT", "Wells, NV", "Winnemuca, NV", "Ely, NV",
+		"Reno, NV", "Sacramento, CA", "Bishop, CA", "Yosemite N.P., CA" ],
+
+	"Arcs": [ 
+			["Yellowstone N.P., WY","Livingston, MT"], 
+			["Yellowstone N.P., WY","Idaho Falls, ID"], 
+			["Livingston, MT","Butte, MT"], 
+			["Butte, MT","Idaho Falls, ID"], 
+			["Butte, MT","Missoula, MT"], 
+			["Missoula, MT","Boise, ID"], 
+			["Idaho Falls, ID","Salt Lake City, UT"], 
+			["Idaho Falls, ID","Twin Falls, ID"], 
+			["Boise, ID","Twin Falls, ID"], 
+			["Boise, ID","Winnemuca, NV"], 
+			["Twin Falls, ID","Wells, NV"], 
+			["Salt Lake City, UT","Wells, NV"], 
+			["Salt Lake City, UT","Ely, NV"], 
+			["Wells, NV","Winnemuca, NV"], 
+			["Wells, NV","Ely, NV"], 
+			["Winnemuca, NV","Reno, NV"], 
+			["Ely, NV","Bishop, CA"], 
+			["Reno, NV","Bishop, CA"], 
+			["Reno, NV","Sacramento, CA"], 
+			["Reno, NV","Yosemite N.P., CA"], 
+			["Sacramento, CA","Yosemite N.P., CA"], 
+			["Bishop, CA","Yosemite N.P., CA"] 
+	],
+
+	"Costs": [ 84, 128, 100, 210, 110, 475, 206, 155, 128, 303, 141, 174, 262,
+		162, 180, 153, 337, 255, 152, 225, 277, 132 ],
+
+	"Capacities": [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ],
+
+	"Start": "Yellowstone N.P., WY",
+
+	"End": "Yosemite N.P., CA",
+
+	"Highways": [
+		"US-89",
+		"US-20",
+		"I-90",
+		"I-15",
+		"I-90",
+		"US-12, US-95",
+		"I-15",
+		"I-15, I-86, I-84",
+		"I-84",
+		"US-95",
+		"US-93",
+		"I-80",
+		"I-15, US-6",
+		"I-80",
+		"US-93",
+		"I-80",
+		"US-6",
+		"US-395",
+		"I-80",
+		"US-395, CA-120",
+		"CA-99, CA-120",
+		"US-395, CA-120"
+	]
+
+}

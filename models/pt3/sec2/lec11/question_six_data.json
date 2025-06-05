@@ -1,0 +1,26 @@
+{
+	"Nodes": [ "Atlanta", "Auckland", "Dallas", "Honolulu", "Los Angeles", 
+		"Melbourne", "New York", "Savannah", "Sydney", "Wellington" ],
+
+	"Arcs": [ ["Savannah","Atlanta"], ["Savannah","New York"], 
+		["Savannah","Los Angeles"], ["Savannah","Dallas"], 
+		["Dallas","Sydney"], ["Dallas","Auckland"], 
+		["Dallas","Los Angeles"], ["Dallas","Honolulu"], 
+		["Atlanta","Los Angeles"], ["Atlanta","Honolulu"], 
+		["New York","Los Angeles"], ["New York","Honolulu"], 
+		["Los Angeles","Sydney"], ["Los Angeles","Auckland"],
+		["Los Angeles","Honolulu"], ["Honolulu","Melbourne"],
+ 		["Melbourne","Wellington"], ["Sydney","Wellington"],
+		["Auckland","Wellington"]
+	],
+
+	"Costs": [ 254, 49, 128, 190, 1616, 1343, 180, 725, 129, 850, 119, 394,
+		1298, 1115, 136, 460, 386, 357, 212 ],
+
+	"Capacities": [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ],
+
+	"Start": "Savannah",
+
+	"End": "Wellington"
+
+}

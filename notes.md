@@ -1607,3 +1607,11 @@ capacity_constraints = model.addConstrs(
   (x.sum(i, j) <= capacity[i, j] for i, j in edges)
 )
 
+Shortest path model:
+Can view as origin = node, destination = node,
+intersections = nodes, arcs = connecting nodes
+* supply = 1 at origin
+* demand = 1 at destination
+* No need for arc capacities (1)
+* costs of arcs ~ drive time
+
