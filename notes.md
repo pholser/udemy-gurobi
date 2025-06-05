@@ -1615,3 +1615,20 @@ intersections = nodes, arcs = connecting nodes
 * No need for arc capacities (1)
 * costs of arcs ~ drive time
 
+Assignment/generalized assignment model:
+-- Another network model
+* N people, N projects
+* Each person can complete a project with some proficiency
+* People and projects are nodes with supply 1 and demand 1
+* Arc from person to project has value == proficiency
+* Max value
+
+e.g.
+-- assign semiconductors to wafer machines
+-- assign university classes to rooms
+-- TV ads to broadcast times
+-- ...
+
+Constraints for when an assignment is not allowed
+Constraints for max number of jobs a person can do
+

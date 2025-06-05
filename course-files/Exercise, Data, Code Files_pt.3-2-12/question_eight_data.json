@@ -1,0 +1,18 @@
+{
+	"black": ["Keres", "Najdorf", "Olafsson", "Reshevsky"],
+
+	"white": ["Benko", "Gligoric", "Panno", "Petrosian"],
+
+	"scores": { 
+		"Reshevsky": 1,
+		"Najdorf": 1,
+		"Keres": 0.5,
+		"Petrosian": 0.5,
+		"Olafsson": 0.5,
+		"Gligoric": 0.5,
+		"Panno": 0,
+		"Benko": 0
+	}
+}
+
+

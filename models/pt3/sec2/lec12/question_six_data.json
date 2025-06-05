@@ -1,0 +1,12 @@
+{
+	"players": ["A", "B", "C", "D", "E", "F"],
+
+	"positions": ["Center", "Power Forward", "Small Forward", "Shooting Guard", "Point Guard", "Sixth Player"],
+
+	"values": [ 
+		[5,4,2,3,3,2], [8,6,4,2,2,4],
+		[8,5,2,1,1,4], [4,4,5,8,7,4],
+		[1,2,4,10,8,5], [1,1,2,3,6,2] ]
+}
+
+

@@ -36,7 +36,7 @@ flow = model.addVars(
 model.setObjective(
     sum(costs[arcs.index((i, j))] * flow[(i, j)]
         for (i, j) in arcs),
-    GRB.MINIMIZE
+    sense=GRB.MINIMIZE
 )
 
 # Constraints
