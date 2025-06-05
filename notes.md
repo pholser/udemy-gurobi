@@ -1632,3 +1632,9 @@ e.g.
 Constraints for when an assignment is not allowed
 Constraints for max number of jobs a person can do
 
+Roundoff error:
+-- if `x[i, j]` is a gurobipy variable, then
+   `if x[i, j].X == 1` doesn't always work
+-- For binary vars: `if x[i, j].X > 0.5`
+-- For continuous vars: `if x[i, j].X > 1 + ep and x[i, j].X < 1 + ep`
+
