@@ -1637,4 +1637,3 @@ Roundoff error:
    `if x[i, j].X == 1` doesn't always work
 -- For binary vars: `if x[i, j].X > 0.5`
 -- For continuous vars: `if x[i, j].X > 1 + ep and x[i, j].X < 1 + ep`
-
